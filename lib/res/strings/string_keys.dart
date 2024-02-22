@@ -1,0 +1,33 @@
+///Here we keep the keys for our translation Strings.
+///Key names must be static constants, use the same
+///text for the value as is the property name,
+///this way we make sure for uniqueness of the keys.
+class StrKey {
+  //Common
+  static const SUPPORT_ITEM_SHOW_LICENSES = 'SUPPORT_ITEM_SHOW_LICENSES';
+  static const ERROR_PARAGRAPH_401_NO_OR_INVALID_CREDENTIALS = 'ERROR_PARAGRAPH_401_NO_OR_INVALID_CREDENTIALS';
+  static const ERROR_PARAGRAPH_403_NOT_ENOUGH_PRIVILEGES = 'ERROR_PARAGRAPH_403_NOT_ENOUGH_PRIVILEGES';
+  static const ERROR_PARAGRAPH_500_INTERNAL_SERVER_ERROR = 'ERROR_PARAGRAPH_500_INTERNAL_SERVER_ERROR';
+  static const ERROR_PARAGRAPH_404_PAGE_NOT_FOUND = 'ERROR_PARAGRAPH_404_PAGE_NOT_FOUND';
+  static const ERROR_PARAGRAPH_NO_NETWORK = 'ERROR_PARAGRAPH_NO_NETWORK';
+
+  // Login
+  static const LOGIN_WELCOME_TITLE = 'LOGIN_WELCOME_TITLE';
+  static const COMMON_EMAIL = 'COMMON_EMAIL';
+  static const COMMON_PASSWORD = 'COMMON_PASSWORD';
+  static const BUTTON_SIGN_IN = 'BUTTON_SIGN_IN';
+  static const ERROR_INVALID_EMAIL_OR_PASSWORD = 'ERROR_INVALID_EMAIL_OR_PASSWORD';
+  static const ERROR_INVALID_EMAIL_OR_PASSWORD_HEADER = 'ERROR_INVALID_EMAIL_OR_PASSWORD_HEADER';
+  static const ERROR_EMPTY_EMAIL_OR_PASSWORD = 'ERROR_EMPTY_EMAIL_OR_PASSWORD';
+  static const ERROR_AUTHENTICATE = 'ERROR_AUTHENTICATE';
+  static const ERROR_PASSWORD_PATTERN = 'ERROR_PASSWORD_PATTERN';
+
+  //Home
+  static const HOME_TITLE = 'HOME_TITLE';
+  static const BUTTON_LOG_OUT = 'BUTTON_LOG_OUT';
+  static const BUTTON_LOAD = 'BUTTON_LOAD';
+  static const LBL_ORGANIZATIONS = 'LBL_ORGANIZATIONS';
+  static const LBL_NAME = 'LBL_NAME';
+  static const LBL_CLASSES = 'LBL_CLASSES';
+  static const LBL_MEMBERS = 'LBL_MEMBERS';
+}
