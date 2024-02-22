@@ -6,6 +6,7 @@ import 'package:g_base_package/base/utils/system.dart';
 import '../../res/res.dart';
 import '../../utils/ui_utils.dart';
 import '../base/app_base_state.dart';
+import '../counter/counter_screen.dart';
 import '../login/login_screen.dart';
 
 class HomePage extends StatefulWidget {
@@ -62,6 +63,8 @@ class _HomePageState extends AppBaseState<HomePage> {
               fit: BoxFit.fitHeight,
             ),
             Style.normalSpaceH,
+            _counterBtn(context),
+            Style.normalSpaceH,
             _logoutBtn(context),
           ],
         ),
@@ -86,6 +89,28 @@ class _HomePageState extends AppBaseState<HomePage> {
         padding: EdgeInsets.all(Dimen.paddingMicro),
         child: Text(
           Txt.get(StrKey.BUTTON_LOG_OUT).toUpperCase(),
+          style: Style.btnText,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+
+  Widget _counterBtn(BuildContext context) {
+    return UiUtils.buildRoundedButton(
+      color: AppColors.btnMain,
+      corners: Dimen.cornersHuge,
+      width: Dimen.block * 45,
+      onClickAction: () {
+
+        //Go back to login screen and remove all screens opened in the stack until now.
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => const CounterPage()));
+      },
+      child: Padding(
+        padding: EdgeInsets.all(Dimen.paddingMicro),
+        child: Text(
+          "Counter",
           style: Style.btnText,
           textAlign: TextAlign.center,
         ),
