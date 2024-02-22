@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:g_base_package/base/app_exception.dart';
 import 'package:g_base_package/base/lang/localization.dart';
 import 'package:g_base_package/base/provider/instance_provider.dart';
@@ -15,9 +16,41 @@ class LoginBloc extends AppBaseBloc<LoginEvent, LoginState> {
   @override
   String get tag => "LoginBloc";
 
-  //Our constructor can accept initial state, this is optional for unit tests when we want to test the block against
-  // some specific state.
-  LoginBloc({LoginState? initialState}) : super(initialState ?? LoginState.initial());
+  ///Our constructor can accept initial state, this is optional for unit tests when we want to test the block against
+  /// some specific state.
+  LoginBloc({LoginState? initialState}) : super(initialState ?? LoginState.initial()) {
+    //From Bloc version 7.2.x you can subscribe to events with "on" function.
+    //We create one common _onEvent function that replaces mapEventToState, but does the same.
+    //You can use either "on" or "mapEventToState" function but not both.
+    on<ShowProgress>((event, emit) => _onEvent(event, emit));
+    on<HideProgress>((event, emit) => _onEvent(event, emit));
+    on<OnInvalidPassword>((event, emit) => _onEvent(event, emit));
+    on<OnInvalidUsername>((event, emit) => _onEvent(event, emit));
+    on<OnLoginSuccessfully>((event, emit) => _onEvent(event, emit));
+    on<OnError>((event, emit) => _onEvent(event, emit));
+  }
+
+  ///This is the function that will be called when someone call add(LoginEvent).
+  ///Here we check what the event is and change the state related to it. Then emit the state to the UI.
+  ///The block mechanism will do a comparison btw current and new state and if there are no changed will not
+  ///emit it to the UI. The state it self is equitable and can do quick comparisons.
+  _onEvent(LoginEvent event, Emitter<LoginState> emitter) {
+    Log.d("$event", "$tag event");
+    if (event is ShowProgress) {
+      //here the event was ShowProgress so we change on the current state only that field to true and emit it to the UI.
+      emitter(state.copyWith(showProgress: true));
+    } else if (event is HideProgress) {
+      emitter(state.copyWith(showProgress: false));
+    } else if (event is OnInvalidPassword) {
+      emitter(state.copyWith(errorPassword: event.error, canClearPasswordError: true));
+    } else if (event is OnInvalidUsername) {
+      emitter(state.copyWith(errorUsername: event.error, canClearUsernameError: true));
+    } else if (event is OnLoginSuccessfully) {
+      emitter(state.copyWith(isLoginSuccessfully: event.isLoginSuccessfully, showProgress: false));
+    } else if (event is OnError) {
+      emitter(state.copyWith(showProgress: false, error: event.error));
+    }
+  }
 
   @override
   Future<void> close() {
@@ -29,35 +62,36 @@ class LoginBloc extends AppBaseBloc<LoginEvent, LoginState> {
   ///Here we check what the event is and change the state related to it. Then emit the state to the UI.
   ///The block mechanism will do a comparison btw current and new state and if there are no changed will not
   ///emit it to the UI. The state it self is equitable and can do quick comparisons.
-  @override
-  Stream<LoginState> mapEventToState(LoginEvent event) async* {
-    Log.d("$event", "$tag event");
-
-    if (event is ShowProgress) {
-      //here the event was ShowProgress so we change on the current state only that field to true and emit it to the UI.
-      yield state.copyWith(showProgress: true);
-    }
-
-    if (event is HideProgress) {
-      yield state.copyWith(showProgress: false);
-    }
-
-    if (event is OnInvalidPassword) {
-      yield state.copyWith(errorPassword: event.error, canClearPasswordError: true);
-    }
-
-    if (event is OnInvalidUsername) {
-      yield state.copyWith(errorUsername: event.error, canClearUsernameError: true);
-    }
-
-    if (event is OnLoginSuccessfully) {
-      yield state.copyWith(isLoginSuccessfully: event.isLoginSuccessfully, showProgress: false);
-    }
-
-    if (event is OnError) {
-      yield state.copyWith(showProgress: false, error: event.error);
-    }
-  }
+  ///This is the way Bloc works until version 8.x.x
+// @override
+// Stream<LoginState> mapEventToState(LoginEvent event) async* {
+//   Log.d("$event", "$tag event");
+//
+//   if (event is ShowProgress) {
+//     //here the event was ShowProgress so we change on the current state only that field to true and emit it to the UI.
+//     yield state.copyWith(showProgress: true);
+//   }
+//
+//   if (event is HideProgress) {
+//     yield state.copyWith(showProgress: false);
+//   }
+//
+//   if (event is OnInvalidPassword) {
+//     yield state.copyWith(errorPassword: event.error, canClearPasswordError: true);
+//   }
+//
+//   if (event is OnInvalidUsername) {
+//     yield state.copyWith(errorUsername: event.error, canClearUsernameError: true);
+//   }
+//
+//   if (event is OnLoginSuccessfully) {
+//     yield state.copyWith(isLoginSuccessfully: event.isLoginSuccessfully, showProgress: false);
+//   }
+//
+//   if (event is OnError) {
+//     yield state.copyWith(showProgress: false, error: event.error);
+//   }
+// }
 
   bool doLogin(String username, String password) {
     //We are about to do a server login. First lets check if the progress is not showed.
